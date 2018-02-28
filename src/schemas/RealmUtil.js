@@ -13,6 +13,60 @@ export const AssetSchema = {
     }
 }
 
+export const UserSchema = {
+    name: 'User',
+    properties: {
+        username:   'string',
+        password:   'string',
+        lastlogon:  'date?'
+    }
+}
+
+// return new Promise((resolve, reject) => {
+//     setTimeout(function() {
+//       var didSucceed = Math.random() >= 0.5;
+//       didSucceed ? resolve(new Date()) : reject('Error');
+//     }, 2000);
+//   })
+
+export function getUserPassword(username) {
+    return new Promise( (resolve, reject) => {
+        Realm.open({schema: [UserSchema]})
+        .then(realm => {
+            let user = realm.objects('User').filtered('username = "' + username + '"');
+            if (user.length < 1) {
+                console.log('Return -1');
+                resolve('-1')
+            }
+            console.log('Return ' + user[0].password);
+            resolve(user[0].password);
+        })
+        .catch(error => {
+            reject(error);
+        })
+    })
+}
+
+export function saveUser(user) {
+    Realm.open({schema: [UserSchema]})
+        .then(realm => {
+            realm.write(() => {
+                const x = realm.create('User', {
+                    username: user.username,
+                    password: user.password,
+                    lastlogondate: new Date()
+                });
+                console.log('Saved user:');
+                console.log(x);
+            })
+        })
+        .catch(error => {
+            console.log(error);
+            alert('Unable to access local database');
+        })
+    }
+
+
 export function saveAssetsToRealm(assets) {
     console.log('Executed saveAssetsToRealm');
     Realm.open({schema: [AssetSchema]})
@@ -46,10 +100,10 @@ export function saveAssetsToRealm(assets) {
         })
         .catch(error => {
             console.log(error);
-            alert('Unable to write to access local database');
+            alert('Unable to access local database');
         });
+    }
 
-}
 
 export function getAllAssetsFromRealm() {
     //let objs = realm.objects(MyObjType).toArray()
@@ -61,4 +115,5 @@ export function getAllAssetsFromRealm() {
         .catch(error => error => {
             alert('Unable to write to access local database');
         }); 
+    
 }

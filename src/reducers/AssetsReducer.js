@@ -3,7 +3,7 @@ import { FETCHING_ASSETS, FETCHING_ASSETS_FAILURE, FETCHING_ASSETS_SUCCESS, CHEC
 const initialState = {
     assets: [],
     isFetching: false,
-    error: false
+    error: false,
 }
 
 export default function assetsReducer(state = initialState, action) {

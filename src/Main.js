@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import AssetList from './components/AssetList';
+
 import { bindActionCreators } from 'redux';
 import * as Actions from './actions/AssetsActions';
 import {connect} from 'react-redux';
+
+import AssetList from './components/AssetList';
+import LoginForm from './components/LoginForm';
 
 class Main extends Component {
 
@@ -16,6 +19,15 @@ class Main extends Component {
   }
 
   render() {
+    if (!this.props.loggedin) {
+      return (
+          <LoginForm />
+      );
+    }
+    console.log('fetching data: ' + this.props.isFetching);
+    console.log('state.loggedin: ' + this.props.loggedin);
+    console.log('fail count: ' + this.props.loginfailcount);
+
     if (this.props.isFetching) {
       return (
         <View style={styles.container}>
@@ -42,9 +54,11 @@ class Main extends Component {
 
 function mapStateToProps(state, props) {
   return {
-    assets: state.assetsReducer.assets,
-    isFetching: state.assetsReducer.isFetching,
-    error: state.assetsReducer.error
+    assets: state.assets.assets,
+    isFetching: state.assets.isFetching,
+    error: state.assets.error,
+    loggedin: state.login.loggedin,
+    loginfailcount: state.login.loginfailcount
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, FlatList, View, TouchableOpacity, } from 'react-native';
+import { StyleSheet, Text, FlatList, View, TouchableOpacity, } from 'react-native';
 import PropTypes from 'prop-types';
 import AssetItem from './AssetItem';
 
